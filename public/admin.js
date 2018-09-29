@@ -8,7 +8,6 @@ socket.emit("getAllSubjects", function (subjects) {
     });
 });
 $(document).ready(function () {
-    console.log($('#addAlumni').click);
     $('#addAlumni').click(
         
         function () {
@@ -29,6 +28,18 @@ $(document).ready(function () {
             };
             alumni = JSON.stringify(alumni);
             socket.emit("newAlumni",alumni,function(message){
+                console.log(message);
+            });
+        }
+    );
+    $('#addSubject').click(
+        
+        function () {
+            var subject = {
+                name: $('#subject').val()
+            };
+            subject = JSON.stringify(subject);
+            socket.emit("newSubject",subject,function(message){
                 console.log(message);
             });
         }

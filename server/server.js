@@ -36,6 +36,14 @@ io.on('connection', (socket) => {
             callback(alumnis);
         });
     });
+    socket.on("newSubject", (subject, callback) => {
+        newsubject = new Subject(JSON.parse(subject));
+        newsubject.save().then(() => {
+            callback("Subject Was Added");
+        }).catch((e) => {
+            callback(e);
+        });
+    });
     socket.on("newAlumni", (alumni, callback) => {
         newAlumni = new Alumni(JSON.parse(alumni));
         newAlumni.save().then(() => {
