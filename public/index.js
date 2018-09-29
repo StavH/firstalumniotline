@@ -8,12 +8,19 @@ socket.emit("getAllSubjects", function (subjects) {
     });
 });
 socket.emit("getAllAlumnis", function (alumnis) {
+
+
     alumnis.forEach(alumni => {
+        var subjectList = "";
+        alumni.subjects.forEach(subject => {
+            subjectList += subject.name + ", ";
+        });
+        subjectList = subjectList.substring(0,subjectList.length-2);
         var row = $('<div class="d-inline-flex col-12 justify-content-center"></div>');
         var image = $('<div class="d-flex col-2 border border-secondary">Image</div>');
         var firstName = $('<div class="d-flex col-2 border border-secondary">' + alumni.first_name + '</div>');
         var lastName = $('<div class="d-flex col-2 border border-secondary">' + alumni.last_name + '</div>');
-        var subjects = $('<div class="d-flex col-2 border border-secondary">SUBJECTS</div>');
+        var subjects = $('<div class="d-flex col-2 border border-secondary">' + subjectList + '</div>');
         var Continue = $('<div class="d-flex col-2 border border-secondary"><a href="mailTo:' + alumni.email + '"><button class="btn btn-danger">שלח מייל</button></a><a href="tel:' + alumni.phone + '"><button class="btn btn-success">התקשר</button></a></div>');
         row.append(image);
         row.append(firstName);
