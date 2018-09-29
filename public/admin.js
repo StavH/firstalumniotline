@@ -1,0 +1,36 @@
+var socket = io();
+socket.emit("getAllSubjects", function (subjects) {
+    subjects.forEach(subject => {
+        var label = $('<label class="form-group form-check-label">' + subject.name + '</label>');
+        var input = $('<input type="checkbox" name="subjects" class="form-group form-check-input" value="' + subject.name + '" />')
+        label.prepend(input);
+        $('#subjectsList').append(label);
+    });
+});
+$(document).ready(function () {
+    console.log($('#addAlumni').click);
+    $('#addAlumni').click(
+        
+        function () {
+            var subjects = [];
+            $('input[name="subjects"]:checked').each(
+                function () {
+                    subjects.push({
+                        name:this.value
+                    });
+                }
+            )
+            var alumni = {
+                first_name: $('#firstName').val(),
+                last_name: $('#lastName').val(),
+                email: $('#email').val(),
+                phone: $('#phone').val(),
+                subjects
+            };
+            alumni = JSON.stringify(alumni);
+            socket.emit("newAlumni",alumni,function(message){
+                console.log(message);
+            });
+        }
+    );
+});
