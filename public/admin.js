@@ -40,7 +40,7 @@ $(document).ready(function () {
             };
             subject = JSON.stringify(subject);
             socket.emit("newSubject",subject,function(message){
-                console.log(message);
+                window.alert(message);
             });
         }
     );
