@@ -11,7 +11,8 @@ var Alumni = mongoose.model('Alumni', {
     },
     email: {
         type: mongoose.SchemaTypes.Email,
-        default: "no@email.com"
+        required: true,
+        unique: true
     },
     phone: {
         type: String,
@@ -45,3 +46,6 @@ var Alumni = mongoose.model('Alumni', {
         default: 0
     }
 });
+module.exports = {
+    Alumni
+};
