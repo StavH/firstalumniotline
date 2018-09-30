@@ -18,7 +18,7 @@ $(document).ready(function () {
                         name:this.value
                     });
                 }
-            )
+            );
             var alumni = {
                 first_name: $('#firstName').val(),
                 last_name: $('#lastName').val(),
@@ -28,7 +28,7 @@ $(document).ready(function () {
             };
             alumni = JSON.stringify(alumni);
             socket.emit("newAlumni",alumni,function(message){
-                console.log(message);
+                window.alert(message);
             });
         }
     );

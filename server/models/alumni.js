@@ -22,8 +22,7 @@ var Alumni = mongoose.model('Alumni', {
         name: {
             type: String,
             required: true
-        },
-        default: []
+        }
     }],
     details: {
         type: String,
