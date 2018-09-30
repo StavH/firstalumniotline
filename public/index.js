@@ -35,6 +35,15 @@ socket.emit("getAllAlumnis", function (alumnis) {
     showAlumnisFromArray(alumnis);
 });
 $(document).ready(function () {
+    $('btnReset').click(function(){
+        $('input[name="subjects"]:checked').each(
+            function () {
+                this.prop('checked',false);
+            }
+        );
+        $('#firstName').val() = "";
+        $('#lastName').val() = "";
+    });
     $('#btnSearch').click(function () {
         var subjects = [];
             $('input[name="subjects"]:checked').each(
