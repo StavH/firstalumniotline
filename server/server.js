@@ -2,6 +2,7 @@ const path = require('path');
 const http = require('http');
 const express = require('express');
 const socketIO = require('socket.io');
+const _ = require('lodash');
 const {
     mongoose
 } = require('./db/mongoose');
@@ -31,8 +32,8 @@ io.on('connection', (socket) => {
         });
 
     });
-    socket.on("getAllAlumnis",(callback)=>{
-        Alumni.find({},(err,alumnis)=>{
+    socket.on("getAllAlumnis", (callback) => {
+        Alumni.find({}, (err, alumnis) => {
             callback(alumnis);
         });
     });
@@ -52,6 +53,45 @@ io.on('connection', (socket) => {
             callback(e);
         });
     });
+    socket.on("getAlumnisFiltered", (filter, callback) => {
+        if (filter.first_name == "") {
+            delete filter.first_name;
+        }
+        if (filter.last_name == "") {
+            delete filter.last_name;
+        }
+        if (filter.subjects.length != 0) {
+            console.log("subjects");
+        }
+        var subjects = [];
+        subjects = filter.subjects.map(obj => obj.name);
+        console.log(subjects);
+        delete filter.subjects;
+        var docSubject = [];
+        var result = [];
+        alumnis = Alumni.find(filter, (err, docs) => {
+            if (subjects.length > 0) {
+                result = docs.filter(function (doc) {
+                    docSubject = [];
+                    doc.subjects.forEach(subject => {
+                        docSubject.push(subject.name);
+                    }); // get a list of doc Subjects
+                    console.log(doc.first_name);
+                    console.log("docSubject:" + docSubject);
+                    console.log("subjects: " + subjects);
+                    console.log(_.intersection(docSubject, subjects).length);
+                    console.log("------------------------");
+                    return (_.intersection(docSubject, subjects).length > 0);
+                });
+            } else {
+                result = docs;
+            }
+            console.log("Result: " + result.length);
+            callback(result);
+        });
+
+
+    })
 });
 server.listen(port, () => {
     console.log(`Server is listening on port ${port}`);
