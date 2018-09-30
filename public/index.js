@@ -21,7 +21,9 @@ function showAlumnisFromArray(alumnis) {
         row.append(Continue);
         row.on('click', function () {
             $('.modal-title').text(alumni.first_name + " " + alumni.last_name);
-            $('.modal-body').text(alumni.details);
+            $('.modal-body').html(
+                $('<div class="card"><div class="card-header">פרטים נוספים</div><div class="card-body">'+alumni.details+'</div></div><div class="card"><div class="card-header">טלפון</div><div class="card-body">'+alumni.phone+'</div></div><div class="card"><div class="card-header">אימייל</div><div class="card-body">'+alumni.email+'</div></div>')
+            );
         });
         console.log(row);
         $('#alumnis').append(row);
