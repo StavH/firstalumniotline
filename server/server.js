@@ -84,7 +84,6 @@ io.on('connection', (socket) => {
                     return (_.intersection(docSubject, subjects).length > 0);
                 });
             } else {
-                
                 result = docs;
                 console.log(result);
                 console.log("No subjects filtering");

@@ -24,6 +24,7 @@ $(document).ready(function () {
                 last_name: $('#lastName').val(),
                 email: $('#email').val(),
                 phone: $('#phone').val(),
+                details: $('#desc').val(),
                 subjects
             };
             alumni = JSON.stringify(alumni);
