@@ -15,26 +15,86 @@
 
 </body>
 <div dir="rtl" class="form form-group form-inline d-flex align-items-start">
-        <h2>
-            <label class="form-label form-group text-right">הוספת בוגר חדש:</label>
-        </h2>
-        <input type="text" id="firstName" placeholder="שם פרטי" class="form-control form-group text-center">
-        <input type="text" id="lastName" placeholder="שם משפחה" class="form-control form-group text-center">
-        <input type="text" id="email" placeholder="אימייל" class="form-control form-group text-center">
-        <input type="text" id="phone" placeholder="טלפון" class="form-control form-group text-center">
-        <div class="d-flex flex-column align-items-baseline" id="subjectsList">
-            
+    <h2>
+        <label class="form-label form-group text-right">הוספת בוגר חדש:</label>
+    </h2>
+    <input type="text" id="firstName" placeholder="שם פרטי" class="form-control form-group text-center">
+    <input type="text" id="lastName" placeholder="שם משפחה" class="form-control form-group text-center">
+    <input type="text" id="email" placeholder="אימייל" class="form-control form-group text-center">
+    <input type="text" id="phone" placeholder="טלפון" class="form-control form-group text-center">
+    <div class="d-flex flex-column align-items-baseline" id="subjectsList">
+
+    </div>
+    <textarea id="desc" placeholder="description"></textarea>
+    <button class="btn btn-info" id="addAlumni">צור</button>
+    <button class="btn btn-info" type="reset">איפוס</button>
+</div>
+<div dir="rtl" class="form form-group form-inline d-flex align-items-start">
+    <h2>
+        <label class="form-label form-group text-right">הוספת תחום דעת חדש:</label>
+    </h2>
+    <input type="text" id="subject" placeholder="שם תחום הדעת" class="form-control form-group text-center">
+    <button class="btn btn-info" id="addSubject">צור</button>
+    <button class="btn btn-info" type="reset">איפוס</button>
+    <div class="d-flex flex-column col-10 offset-1 justify-content-center align-items-center border border-info rounded-bottom">
+        <div id="alumnisHeadline" dir="rtl" class="d-inline-flex flex-column col-12 justify-content-center align-items-center">
+            <div class="d-inline-flex col-12 justify-content-center">
+                <div class="d-flex col-2 border border-secondary">Image</div>
+                <div class="d-flex col-2 border border-secondary">First Name</div>
+                <div class="d-flex col-2 border border-secondary">Last Name</div>
+                <div class="d-flex col-2 border border-secondary">Subjects</div>
+                <div class="d-flex col-2 border border-secondary">Continue</div>
+            </div>
         </div>
-        <textarea id="desc" placeholder="description"></textarea>
-        <button class="btn btn-info" id="addAlumni" >צור</button>
-        <button class="btn btn-info" type="reset">איפוס</button>
+        <div id="alumnis" dir="rtl" class="d-inline-flex flex-column col-12 justify-content-center align-items-center"></div>
     </div>
-    <div dir="rtl" class="form form-group form-inline d-flex align-items-start">
-        <h2>
-            <label class="form-label form-group text-right">הוספת תחום דעת חדש:</label>
-        </h2>
-        <input type="text" id="subject" placeholder="שם תחום הדעת" class="form-control form-group text-center">
-        <button class="btn btn-info" id="addSubject" >צור</button>
-        <button class="btn btn-info" type="reset">איפוס</button>
+    <!-- The Modal -->
+    <div class="modal" id="myModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header" dir="rtl">
+                    <h4 class="modal-title">שינוי פרטי בוגר</h4>
+
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body text-right">
+                    <form>
+                        <div class="form-group">שם פרטי:
+                            <input type="text" id="firstNameModal" />
+                        </div>
+                        <div class="form-group">שם משפחה:
+                            <input type="text" id="lastNameModal" />
+                        </div>
+                        <div class="form-group">אימייל:
+                            <input type="text" id="emailModal" />
+                        </div>
+                        <div class="form-group">טלפון:
+                            <input type="text" id="phoneModal" />
+                        </div>
+                        <div class="from-group">תחומי דעת:
+                            <div class="d-flex flex-column align-items-baseline" id="modalList">
+
+                            </div>
+                        </div>
+                        <div class="form-group">פרטים נוספים:
+                            <textarea id="detailsModal"></textarea>
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">ביטול</button>
+                    <button type="button" class="btn btn-success" id="update">עדכון</button>
+                </div>
+            </div>
+
+            <!-- Modal footer -->
+
+
+        </div>
     </div>
+</div>
+</div>
+
 </html>

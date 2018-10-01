@@ -53,6 +53,16 @@ io.on('connection', (socket) => {
             callback(e);
         });
     });
+    socket.on("updateAlumni",(prevAlum,alumni,callback)=>{
+        Alumni.findOneAndUpdate(prevAlum,alumni,(err,doc)=>{
+            if(err){
+                callback("Error on updating Alumni");
+            }
+            else{
+                callback("Alumni updated successfully");
+            }
+        });
+    });
     socket.on("getAlumnisFiltered", (filter, callback) => {
         if (filter.first_name == "") {
             delete filter.first_name;
