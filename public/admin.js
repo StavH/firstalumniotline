@@ -116,6 +116,7 @@ $(document).ready(function () {
             alumni = JSON.stringify(alumni);
             socket.emit("newAlumni", alumni, function (message) {
                 window.alert(message);
+                location.reload(); 
             });
         }
     );
@@ -158,6 +159,7 @@ $(document).ready(function () {
             subject = JSON.stringify(subject);
             socket.emit("newSubject", subject, function (message) {
                 window.alert(message);
+                location.reload(); 
             });
         }
     );
