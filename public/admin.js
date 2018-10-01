@@ -106,7 +106,7 @@ $(document).ready(function () {
     });
     $('#addAlumni').click(
         function () {
-            console.log("SSS");
+            
             var subjects = [];
             $('input[name="subjects"]:checked').each(
                 function () {
@@ -131,13 +131,13 @@ $(document).ready(function () {
                     image: document.querySelector('#image').files[0],
                     format: imageName.substring(imageName.length - 3, imageName.length)
                 };
-                
             }
             else{
                 var imageFile = null;
             }
             console.log(imageFile);
             socket.emit("newAlumni", imageFile, alumni, function (message) {
+                console.log("SSS");
                 window.alert(message);
                 location.reload();
             });
