@@ -19,9 +19,9 @@ var Alumni = mongoose.model('Alumni', {
         required: true
     },
     subjects: [{
-        name: {
+        name:{
             type: String,
-            required: true
+            required:true
         }
     }],
     details: {

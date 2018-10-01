@@ -15,7 +15,6 @@ const {
 
 const publicPath = path.join(__dirname, '../public');
 const port = process.env.PORT || 3000;
-console.log(publicPath);
 var app = new express();
 var server = http.createServer(app);
 var io = socketIO(server);
@@ -24,13 +23,18 @@ app.use(express.static(publicPath));
 app.get('/admin', (req, res) => {
     res.sendFile(publicPath + '/admin.html');
 });
+
 io.on('connection', (socket) => {
-    console.log('Connected to host');
     socket.on("getAllSubjects", (callback) => {
         Subject.find({}, (err, subjects) => {
             callback(subjects);
         });
 
+    });
+    socket.on("getSubjectName",(id,callback)=>{
+        Subject.findById(id, function (err, doc){
+            callback(err,doc.name);
+          });
     });
     socket.on("getAllAlumnis", (callback) => {
         Alumni.find({}, (err, alumnis) => {
@@ -50,17 +54,40 @@ io.on('connection', (socket) => {
         newAlumni.save().then(() => {
             callback("Alumni Was Added");
         }).catch((e) => {
-            callback(e);
+            callback(JSON.stringify(e, null, 2));
         });
     });
-    socket.on("updateAlumni",(prevAlum,alumni,callback)=>{
-        Alumni.findOneAndUpdate(prevAlum,alumni,(err,doc)=>{
-            if(err){
+    socket.on("updateAlumni", (prevAlum, alumni, callback) => {
+        Alumni.findOneAndUpdate(prevAlum, alumni, (err, doc) => {
+            if (err) {
                 callback("Error on updating Alumni");
-            }
-            else{
+            } else {
                 callback("Alumni updated successfully");
             }
+        });
+    });
+    socket.on("updateSubject", (prevSubject, newSubject, callback) => {
+        Subject.findOneAndUpdate({
+            name: prevSubject
+        }, {
+            name: newSubject
+        }, (err, doc) => {
+            callback(err, prevSubject);
+        });
+        Alumni.find({},(err,docs)=>{
+            docs.forEach(doc=>{
+                var subjects = doc.subjects;
+                subjects.forEach(subject=>{
+                    if(subject.name == prevSubject){
+                        subject.name = newSubject;
+                    }
+                });
+                Alumni.findOneAndUpdate({_id:doc.id},{subjects},(err)=>{
+                    if(err == null){
+                        console.log("SUCCEDDDDD");
+                    }
+                });
+            });
         });
     });
     socket.on("getAlumnisFiltered", (filter, callback) => {
@@ -71,11 +98,9 @@ io.on('connection', (socket) => {
             delete filter.last_name;
         }
         if (filter.subjects.length != 0) {
-            console.log("subjects");
         }
         var subjects = [];
         subjects = filter.subjects.map(obj => obj.name);
-        console.log(subjects);
         delete filter.subjects;
         var docSubject = [];
         var result = [];
@@ -86,19 +111,12 @@ io.on('connection', (socket) => {
                     doc.subjects.forEach(subject => {
                         docSubject.push(subject.name);
                     }); // get a list of doc Subjects
-                    console.log(doc.first_name);
-                    console.log("docSubject:" + docSubject);
-                    console.log("subjects: " + subjects);
-                    console.log(_.intersection(docSubject, subjects).length);
-                    console.log("------------------------");
                     return (_.intersection(docSubject, subjects).length > 0);
                 });
             } else {
                 result = docs;
-                console.log(result);
-                console.log("No subjects filtering");
+                
             }
-            console.log("Result: " + result.length);
             callback(result);
         });
 

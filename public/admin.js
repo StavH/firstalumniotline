@@ -51,7 +51,7 @@ socket.emit("getAllSubjects", function (subjects) {
         var label = $('<label class="form-group form-check-label">' + subject.name + '</label>');
         var input = $('<input type="checkbox" name="subjects" class="form-group form-check-input" value="' + subject.name + '" />')
         label.prepend(input);
-        var labelModal = $('<label class="form-group form-check-label">' + subject.name + '</label>');
+        var labelModal = $('<label class="form-group form-check-label">' + subject.id + '</label>');
         var inputModal = $('<input type="checkbox" name="subjectsModal" class="form-group form-check-input" value="' + subject.name + '" />')
         labelModal.prepend(inputModal);
 
@@ -60,7 +60,17 @@ socket.emit("getAllSubjects", function (subjects) {
     });
 });
 $(document).ready(function () {
-    $('btnReset').click(function () {
+    $('#btnUpdateSubject').click(function () {
+        updateMode = "subjects";
+        $('.modal-title').text("עדכון תחומי עניין");
+        $('.modal-body').html("");
+        socket.emit("getAllSubjects", function (subjects) {
+            subjects.forEach(subject => {
+                $('.modal-body').html($('.modal-body').html() + '<div class="card"><input type="text" name="subjectUpdate" id="' + subject.name + '" class="form-control" value="' + subject.name + '"' + '</div>');
+            });
+        });
+    });
+    $('#btnReset').click(function () {
         $('input[name="subjects"]:checked').each(
             function () {
                 this.prop('checked', false);
@@ -75,7 +85,7 @@ $(document).ready(function () {
         $('input[name="subjects"]:checked').each(
             function () {
                 subjects.push({
-                    name: this.value
+                    id: this.value
                 });
             }
         );
@@ -95,13 +105,15 @@ $(document).ready(function () {
         });
     });
     $('#addAlumni').click(
-
         function () {
+            console.log("SSS");
             var subjects = [];
             $('input[name="subjects"]:checked').each(
                 function () {
+                    console.log(this);
                     subjects.push({
                         name: this.value
+
                     });
                 }
             );
@@ -116,7 +128,7 @@ $(document).ready(function () {
             alumni = JSON.stringify(alumni);
             socket.emit("newAlumni", alumni, function (message) {
                 window.alert(message);
-                location.reload(); 
+                location.reload();
             });
         }
     );
@@ -127,7 +139,7 @@ $(document).ready(function () {
                 $('input[name="subjectsModal"]:checked').each(
                     function () {
                         subjects.push({
-                            name: this.value
+                            id: this.value
                         });
                     }
                 );
@@ -141,13 +153,25 @@ $(document).ready(function () {
                 };
                 socket.emit("updateAlumni", prevAlum, alumni, function (message) {
                     window.alert(message);
-                    location.reload(); 
+                    location.reload();
                 });
 
 
             } else {
                 window.alert("Error");
             }
+        }
+        if(updateMode == "subjects"){
+            console.log("subjects");
+            var subjects =  [];
+            $('input[name="subjectUpdate"]').each(function(){
+                socket.emit('updateSubject',this.id,this.value,function(err,prevSubject){
+                    if(err){
+                        window.alert("Couldn't Update " + prevSubject);
+                    }
+                    location.reload();
+                });
+            });
         }
     });
     $('#addSubject').click(
@@ -159,7 +183,7 @@ $(document).ready(function () {
             subject = JSON.stringify(subject);
             socket.emit("newSubject", subject, function (message) {
                 window.alert(message);
-                location.reload(); 
+                location.reload();
             });
         }
     );

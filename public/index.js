@@ -1,10 +1,17 @@
 var socket = io();
-
+function getSubjectName(id){
+    socket.emit("getSubjectName",id,function(err,name){
+        console.log("HERE "+name);
+        return name;
+    });
+}
 function showAlumnisFromArray(alumnis) {
     $('#alumnis').empty();
     alumnis.forEach(alumni => {
         var subjectList = "";
         alumni.subjects.forEach(subject => {
+            
+            
             subjectList += subject.name + ", ";
         });
         subjectList = subjectList.substring(0, subjectList.length - 2);
