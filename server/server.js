@@ -51,7 +51,7 @@ io.on('connection', (socket) => {
         });
     });
     socket.on("newAlumni", (image, alumni, callback) => {
-        
+        console.log("NEW ALUMNI TRYING TO INSERT");
         newAlumni = new Alumni(alumni);
         newAlumni.save().then(() => {
             if (!image) {
