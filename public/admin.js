@@ -51,7 +51,7 @@ socket.emit("getAllSubjects", function (subjects) {
         var label = $('<label class="form-group form-check-label">' + subject.name + '</label>');
         var input = $('<input type="checkbox" name="subjects" class="form-group form-check-input" value="' + subject.name + '" />')
         label.prepend(input);
-        var labelModal = $('<label class="form-group form-check-label">' + subject.id + '</label>');
+        var labelModal = $('<label class="form-group form-check-label">' + subject.name + '</label>');
         var inputModal = $('<input type="checkbox" name="subjectsModal" class="form-group form-check-input" value="' + subject.name + '" />')
         labelModal.prepend(inputModal);
 
@@ -125,13 +125,28 @@ $(document).ready(function () {
                 details: $('#desc').val(),
                 subjects
             };
-            alumni = JSON.stringify(alumni);
-            socket.emit("newAlumni", alumni, function (message) {
+            if(document.querySelector('#image').files[0] != undefined){
+                var imageName = document.querySelector('#image').files[0].name;
+                var imageFile = {
+                    image: document.querySelector('#image').files[0],
+                    format: imageName.substring(imageName.length - 3, imageName.length)
+                };
+                
+            }
+            else{
+                var imageFile = null;
+            }
+            console.log(imageFile);
+            socket.emit("newAlumni", imageFile, alumni, function (message) {
                 window.alert(message);
                 location.reload();
             });
         }
     );
+    $('#imageReset').click(function () {
+        $('#image').val("");
+        
+    });
     $('#update').click(function () {
         if (updateMode == "alumni") {
             if (prevAlum != null) {
@@ -161,12 +176,12 @@ $(document).ready(function () {
                 window.alert("Error");
             }
         }
-        if(updateMode == "subjects"){
+        if (updateMode == "subjects") {
             console.log("subjects");
-            var subjects =  [];
-            $('input[name="subjectUpdate"]').each(function(){
-                socket.emit('updateSubject',this.id,this.value,function(err,prevSubject){
-                    if(err){
+            var subjects = [];
+            $('input[name="subjectUpdate"]').each(function () {
+                socket.emit('updateSubject', this.id, this.value, function (err, prevSubject) {
+                    if (err) {
                         window.alert("Couldn't Update " + prevSubject);
                     }
                     location.reload();

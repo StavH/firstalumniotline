@@ -1,39 +1,46 @@
 var socket = io();
-function getSubjectName(id){
-    socket.emit("getSubjectName",id,function(err,name){
-        console.log("HERE "+name);
+
+function getSubjectName(id) {
+    socket.emit("getSubjectName", id, function (err, name) {
         return name;
     });
 }
+
 function showAlumnisFromArray(alumnis) {
     $('#alumnis').empty();
     alumnis.forEach(alumni => {
-        var subjectList = "";
-        alumni.subjects.forEach(subject => {
+        socket.emit("getImage", alumni.email, function (image) {
+            var imageFile = image;
+            var subjectList = "";
+            alumni.subjects.forEach(subject => {
+                subjectList += subject.name + ", ";
+            });
             
+            subjectList = subjectList.substring(0, subjectList.length - 2);
+            var row = $('<div id="' + alumni.email + '" name="alumni" data-toggle="modal" data-target="#myModal" class="d-inline-flex col-12 justify-content-center"></div>');
+            var imageDiv = $('<div class="d-flex col-2 border border-secondary"><img class="rounded img-thumbnail img-fluid" src="/images/' + image + '"</div>');
+            var firstName = $('<div class="d-flex col-2 border border-secondary">' + alumni.first_name + '</div>');
+            var lastName = $('<div class="d-flex col-2 border border-secondary">' + alumni.last_name + '</div>');
+            var subjects = $('<div class="d-flex col-2 border border-secondary">' + subjectList + '</div>');
+            var Continue = $('<div class="d-flex col-2 border border-secondary"><a href="mailTo:' + alumni.email + '"><button class="btn btn-danger">שלח מייל</button></a><a href="tel:' + alumni.phone + '"><button class="btn btn-success">התקשר</button></a></div>');
             
-            subjectList += subject.name + ", ";
+            row.append(imageDiv);
+            row.append(firstName);
+            row.append(lastName);
+            row.append(subjects);
+            row.append(Continue);
+            
+            row.on('click', function () {
+                
+                $('.modal-title').text(alumni.first_name + " " + alumni.last_name);
+                
+                $('.modal-body').html(
+                    $('<div class="card"><img class="card-img-top" src="/images/' + imageFile + '" alt="Card image"><div class="card-header">פרטים נוספים</div><div class="card-body">' + alumni.details + '</div></div><div class="card"><div class="card-header">טלפון</div><div class="card-body">' + alumni.phone + '</div></div><div class="card"><div class="card-header">אימייל</div><div class="card-body">' + alumni.email + '</div></div>')
+                );
+            });
+            $('#alumnis').append(row);
+
         });
-        subjectList = subjectList.substring(0, subjectList.length - 2);
-        var row = $('<div id="' + alumni.email + '" name="alumni" data-toggle="modal" data-target="#myModal" class="d-inline-flex col-12 justify-content-center"></div>');
-        var image = $('<div class="d-flex col-2 border border-secondary">Image</div>');
-        var firstName = $('<div class="d-flex col-2 border border-secondary">' + alumni.first_name + '</div>');
-        var lastName = $('<div class="d-flex col-2 border border-secondary">' + alumni.last_name + '</div>');
-        var subjects = $('<div class="d-flex col-2 border border-secondary">' + subjectList + '</div>');
-        var Continue = $('<div class="d-flex col-2 border border-secondary"><a href="mailTo:' + alumni.email + '"><button class="btn btn-danger">שלח מייל</button></a><a href="tel:' + alumni.phone + '"><button class="btn btn-success">התקשר</button></a></div>');
-        row.append(image);
-        row.append(firstName);
-        row.append(lastName);
-        row.append(subjects);
-        row.append(Continue);
-        row.on('click', function () {
-            $('.modal-title').text(alumni.first_name + " " + alumni.last_name);
-            $('.modal-body').html(
-                $('<div class="card"><div class="card-header">פרטים נוספים</div><div class="card-body">'+alumni.details+'</div></div><div class="card"><div class="card-header">טלפון</div><div class="card-body">'+alumni.phone+'</div></div><div class="card"><div class="card-header">אימייל</div><div class="card-body">'+alumni.email+'</div></div>')
-            );
-        });
-        console.log(row);
-        $('#alumnis').append(row);
 
     });
 }
@@ -59,7 +66,6 @@ $(document).ready(function () {
         $('#firstName').val() = "";
         $('#lastName').val() = "";
     });
-    console.log($('div[name="alumni"]'));
     $('#btnSearch').click(function () {
         var subjects = [];
         $('input[name="subjects"]:checked').each(
@@ -74,12 +80,10 @@ $(document).ready(function () {
             last_name: $('#lastName').val(),
             subjects
         };
-        console.log(filter);
         socket.emit("getAlumnisFiltered", filter, function (alumnis, err) {
             if (err) {
                 window.alert("No Matching Alumnis");
             } else {
-                console.log(alumnis);
                 showAlumnisFromArray(alumnis);
             }
         });

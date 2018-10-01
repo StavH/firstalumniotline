@@ -1,3 +1,4 @@
+const fs = require('fs');
 const path = require('path');
 const http = require('http');
 const express = require('express');
@@ -31,10 +32,10 @@ io.on('connection', (socket) => {
         });
 
     });
-    socket.on("getSubjectName",(id,callback)=>{
-        Subject.findById(id, function (err, doc){
-            callback(err,doc.name);
-          });
+    socket.on("getSubjectName", (id, callback) => {
+        Subject.findById(id, function (err, doc) {
+            callback(err, doc.name);
+        });
     });
     socket.on("getAllAlumnis", (callback) => {
         Alumni.find({}, (err, alumnis) => {
@@ -49,12 +50,43 @@ io.on('connection', (socket) => {
             callback(e);
         });
     });
-    socket.on("newAlumni", (alumni, callback) => {
-        newAlumni = new Alumni(JSON.parse(alumni));
+    socket.on("newAlumni", (image, alumni, callback) => {
+        
+        newAlumni = new Alumni(alumni);
         newAlumni.save().then(() => {
+            if (!image) {
+                console.log("No Image Entered");
+            } else {
+                var imagePath = publicPath + "/images/" + alumni.email + "." + image.format;
+                console.log(imagePath);
+                fs.writeFile(imagePath, image.image, (err) => {
+                    if (err) {
+                        console.log("Problem Writing Files");
+                        console.log(err);
+                    } else {
+                        console.log("File Added Successfully");
+                    }
+                });
+            }
             callback("Alumni Was Added");
         }).catch((e) => {
             callback(JSON.stringify(e, null, 2));
+        });
+    });
+    socket.on("getImage",(email,callback)=>{
+        var found = false;
+        fs.readdir(publicPath + "/images",(err,files)=>{
+            files.forEach(file=>{
+                if(file.split(email).length>1){
+                        found = true;
+                        callback(file);
+                    
+                }
+            });
+            if(!found){
+                    callback("default.jpg");
+            }
+            callback();
         });
     });
     socket.on("updateAlumni", (prevAlum, alumni, callback) => {
@@ -74,16 +106,20 @@ io.on('connection', (socket) => {
         }, (err, doc) => {
             callback(err, prevSubject);
         });
-        Alumni.find({},(err,docs)=>{
-            docs.forEach(doc=>{
+        Alumni.find({}, (err, docs) => {
+            docs.forEach(doc => {
                 var subjects = doc.subjects;
-                subjects.forEach(subject=>{
-                    if(subject.name == prevSubject){
+                subjects.forEach(subject => {
+                    if (subject.name == prevSubject) {
                         subject.name = newSubject;
                     }
                 });
-                Alumni.findOneAndUpdate({_id:doc.id},{subjects},(err)=>{
-                    if(err == null){
+                Alumni.findOneAndUpdate({
+                    _id: doc.id
+                }, {
+                    subjects
+                }, (err) => {
+                    if (err == null) {
                         console.log("SUCCEDDDDD");
                     }
                 });
@@ -97,8 +133,7 @@ io.on('connection', (socket) => {
         if (filter.last_name == "") {
             delete filter.last_name;
         }
-        if (filter.subjects.length != 0) {
-        }
+        if (filter.subjects.length != 0) {}
         var subjects = [];
         subjects = filter.subjects.map(obj => obj.name);
         delete filter.subjects;
@@ -115,7 +150,7 @@ io.on('connection', (socket) => {
                 });
             } else {
                 result = docs;
-                
+
             }
             callback(result);
         });
