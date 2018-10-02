@@ -52,9 +52,6 @@ socket.emit("getAllSubjects", function (subjects) {
         $('#subjectsList').append(label);
     });
 });
-socket.emit("getAllAlumnis", function (alumnis) {
-    showAlumnisFromArray(alumnis);
-});
 
 $(document).ready(function () {
     $('btnReset').click(function () {

@@ -4,6 +4,7 @@ const http = require('http');
 const express = require('express');
 const socketIO = require('socket.io');
 const lessMiddleware = require('less-middleware');
+const hbs = require('hbs');
 const _ = require('lodash');
 const {
     mongoose
@@ -16,16 +17,23 @@ const {
 } = require('./models/subject');
 
 const publicPath = path.join(__dirname, '../public');
+const partialsPath = path.join(__dirname,'../views/partials');
 const port = process.env.PORT || 3000;
 var app = new express();
 var server = http.createServer(app);
 var io = socketIO(server);
+hbs.registerPartials(partialsPath);
+app.set('view engine', 'hbs');
 app.use(express.static(publicPath));
 app.get('/admin', (req, res) => {
-    res.sendFile(publicPath + '/admin.html');
+    res.render('admin.hbs');
+});
+app.get('/', (req, res) => {
+    res.render('index.hbs');
 });
 
 io.on('connection', (socket) => {
+    console.log(partialsPath);
     socket.on("getAllSubjects", (callback) => {
         Subject.find({}, (err, subjects) => {
             callback(subjects);

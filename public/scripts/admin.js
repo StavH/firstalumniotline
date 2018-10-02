@@ -42,9 +42,6 @@ function showAlumnisFromArray(alumnis) {
 
     });
 }
-socket.emit("getAllAlumnis", function (alumnis) {
-    showAlumnisFromArray(alumnis);
-});
 
 socket.emit("getAllSubjects", function (subjects) {
     subjects.forEach(subject => {
