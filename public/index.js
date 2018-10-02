@@ -17,12 +17,12 @@ function showAlumnisFromArray(alumnis) {
             });
             
             subjectList = subjectList.substring(0, subjectList.length - 2);
-            var row = $('<div id="' + alumni.email + '" name="alumni" data-toggle="modal"  data-target="#myModal" class="d-inline-flex col-12 alumniRow justify-content-center"></div>');
-            var imageDiv = $('<div class="d-flex col-2 border border-secondary alumniContent"><img class="rounded img-thumbnail alumniImg" src="/images/' + image + '"></div>');
-            var firstName = $('<div class="d-flex col-2 border border-secondary alumniContent">' + alumni.first_name + '</div>');
-            var lastName = $('<div class="d-flex col-2 border border-secondary alumniContent">' + alumni.last_name + '</div>');
-            var subjects = $('<div class="d-flex col-2 border border-secondary alumniContent">' + subjectList + '</div>');
-            var Continue = $('<div class="d-flex col-2 border border-secondary alumniContent"><a href="mailTo:' + alumni.email + '"><button class="btn btn-danger">שלח מייל</button></a><a href="tel:' + alumni.phone + '"><button class="btn btn-success">התקשר</button></a></div>');
+            var row = $('<div id="' + alumni.email + '" name="alumni" data-toggle="modal"  data-target="#myModal" class="row justify-content-center"></div>');
+            var imageDiv = $('<div class="alumniContent col-2 border border-secondary"><img class="alumniImg" src="/images/' + image + '"></div>');
+            var firstName = $('<div class="alumniContent col-2 border border-secondary">' + alumni.first_name + '</div>');
+            var lastName = $('<div class="alumniContent col-2 border border-secondary">' + alumni.last_name + '</div>');
+            var subjects = $('<div class="alumniContent col-2 border border-secondary">' + subjectList + '</div>');
+            var Continue = $('<div class="alumniContent col-2 border border-secondary"><a href="mailTo:' + alumni.email + '"><button class="btn btn-danger alumniBtn">שלח מייל</button></a><a href="tel:' + alumni.phone + '"><button class="btn btn-success alumniBtn">התקשר</button></a></div>');
             
             row.append(imageDiv);
             row.append(firstName);
@@ -46,8 +46,8 @@ function showAlumnisFromArray(alumnis) {
 }
 socket.emit("getAllSubjects", function (subjects) {
     subjects.forEach(subject => {
-        var label = $('<label class="form-group form-check-label">' + subject.name + '</label>');
-        var input = $('<input type="checkbox" name="subjects" class="form-group form-check-input" value="' + subject.name + '" />')
+        var label = $('<label class="subjects">' + subject.name + '</label>');
+        var input = $('<input type="checkbox" name="subjects" value="' + subject.name + '" />')
         label.prepend(input);
         $('#subjectsList').append(label);
     });

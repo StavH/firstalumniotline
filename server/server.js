@@ -3,6 +3,7 @@ const path = require('path');
 const http = require('http');
 const express = require('express');
 const socketIO = require('socket.io');
+const lessMiddleware = require('less-middleware');
 const _ = require('lodash');
 const {
     mongoose
@@ -19,7 +20,6 @@ const port = process.env.PORT || 3000;
 var app = new express();
 var server = http.createServer(app);
 var io = socketIO(server);
-
 app.use(express.static(publicPath));
 app.get('/admin', (req, res) => {
     res.sendFile(publicPath + '/admin.html');
@@ -73,18 +73,18 @@ io.on('connection', (socket) => {
             callback(JSON.stringify(e, null, 2));
         });
     });
-    socket.on("getImage",(email,callback)=>{
+    socket.on("getImage", (email, callback) => {
         var found = false;
-        fs.readdir(publicPath + "/images",(err,files)=>{
-            files.forEach(file=>{
-                if(file.split(email).length>1){
-                        found = true;
-                        callback(file);
-                    
+        fs.readdir(publicPath + "/images", (err, files) => {
+            files.forEach(file => {
+                if (file.split(email).length > 1) {
+                    found = true;
+                    callback(file);
+
                 }
             });
-            if(!found){
-                    callback("default.jpg");
+            if (!found) {
+                callback("default.jpg");
             }
             callback();
         });

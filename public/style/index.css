@@ -1,0 +1,39 @@
+.subjects {
+  margin-right: 5%;
+}
+
+body {
+  height: 100%;
+  font-size: 1vw;
+}
+
+#headline {
+  height: 10%;
+}
+
+#searchbar {
+  height: 20%;
+  overflow:hidden;
+}
+#searchForm{
+margin-top:2%;
+margin-bottom:2%;
+}
+#alumnisList{
+  display: block;
+  height:100%;
+}
+.searchInput{
+  height:50%;
+}
+#alumnisHeadline{
+  margin-top:2%;
+}
+.alumniImg{
+  width: 75%;
+  /* height: 100%; */
+}
+.alumniBtn{
+  width: 100%;
+  font-size: 100%;
+}
