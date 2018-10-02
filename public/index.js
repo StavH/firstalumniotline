@@ -17,12 +17,12 @@ function showAlumnisFromArray(alumnis) {
             });
             
             subjectList = subjectList.substring(0, subjectList.length - 2);
-            var row = $('<div id="' + alumni.email + '" name="alumni" data-toggle="modal" data-target="#myModal" class="d-inline-flex col-12 justify-content-center"></div>');
-            var imageDiv = $('<div class="d-flex col-2 border border-secondary"><img class="rounded img-thumbnail img-fluid" src="/images/' + image + '"</div>');
-            var firstName = $('<div class="d-flex col-2 border border-secondary">' + alumni.first_name + '</div>');
-            var lastName = $('<div class="d-flex col-2 border border-secondary">' + alumni.last_name + '</div>');
-            var subjects = $('<div class="d-flex col-2 border border-secondary">' + subjectList + '</div>');
-            var Continue = $('<div class="d-flex col-2 border border-secondary"><a href="mailTo:' + alumni.email + '"><button class="btn btn-danger">שלח מייל</button></a><a href="tel:' + alumni.phone + '"><button class="btn btn-success">התקשר</button></a></div>');
+            var row = $('<div id="' + alumni.email + '" name="alumni" data-toggle="modal"  data-target="#myModal" class="d-inline-flex col-12 alumniRow justify-content-center"></div>');
+            var imageDiv = $('<div class="d-flex col-2 border border-secondary alumniContent"><img class="rounded img-thumbnail alumniImg" src="/images/' + image + '"></div>');
+            var firstName = $('<div class="d-flex col-2 border border-secondary alumniContent">' + alumni.first_name + '</div>');
+            var lastName = $('<div class="d-flex col-2 border border-secondary alumniContent">' + alumni.last_name + '</div>');
+            var subjects = $('<div class="d-flex col-2 border border-secondary alumniContent">' + subjectList + '</div>');
+            var Continue = $('<div class="d-flex col-2 border border-secondary alumniContent"><a href="mailTo:' + alumni.email + '"><button class="btn btn-danger">שלח מייל</button></a><a href="tel:' + alumni.phone + '"><button class="btn btn-success">התקשר</button></a></div>');
             
             row.append(imageDiv);
             row.append(firstName);
