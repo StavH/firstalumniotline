@@ -1,8 +1,12 @@
+<!DOCTYPE html>
 <html>
 
 <head>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
         crossorigin="anonymous">
+    <script type="text/javascript">
+        var clickMode = "admin";
+    </script>
     <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
         crossorigin="anonymous"></script>
@@ -19,7 +23,7 @@
         <label class="form-label form-group text-right">הוספת בוגר חדש:</label>
     </h2>
     <input type="file" id="image">
-    <button id="imageReset"class="btn btn-secondary">X</button>
+    <button id="imageReset" class="btn btn-secondary">X</button>
     <input type="text" id="firstName" placeholder="שם פרטי" class="form-control form-group text-center">
     <input type="text" id="lastName" placeholder="שם משפחה" class="form-control form-group text-center">
     <input type="text" id="email" placeholder="אימייל" class="form-control form-group text-center">
@@ -39,8 +43,8 @@
     <button class="btn btn-info" id="addSubject">צור</button>
     <button class="btn btn-info" type="reset">איפוס</button>
     <button class="btn btn-info" id="btnUpdateSubject" data-toggle="modal" data-target="#myModal">עדכן</button>
-    {{>alumnis}}
-    {{!-- <div class="d-flex flex-column col-10 offset-1 justify-content-center align-items-center border border-info rounded-bottom">
+    {{>alumnis}} {{!--
+    <div class="d-flex flex-column col-10 offset-1 justify-content-center align-items-center border border-info rounded-bottom">
         <div id="alumnisHeadline" dir="rtl" class="d-inline-flex flex-column col-12 justify-content-center align-items-center">
             <div class="d-inline-flex col-12 justify-content-center">
                 <div class="d-flex col-2 border border-secondary">Image</div>
@@ -52,7 +56,7 @@
         </div>
         <div id="alumnis" dir="rtl" class="d-inline-flex flex-column col-12 justify-content-center align-items-center"></div>
     </div>
-    <!-- The Modal --> --}}
+    <!-- The Modal -->--}}
     <div class="modal" id="myModal">
         <div class="modal-dialog">
             <div class="modal-content">

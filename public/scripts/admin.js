@@ -43,20 +43,21 @@ function showAlumnisFromArray(alumnis) {
     });
 }
 
-socket.emit("getAllSubjects", function (subjects) {
-    subjects.forEach(subject => {
-        var label = $('<label class="form-group form-check-label">' + subject.name + '</label>');
-        var input = $('<input type="checkbox" name="subjects" class="form-group form-check-input" value="' + subject.name + '" />')
-        label.prepend(input);
-        var labelModal = $('<label class="form-group form-check-label">' + subject.name + '</label>');
-        var inputModal = $('<input type="checkbox" name="subjectsModal" class="form-group form-check-input" value="' + subject.name + '" />')
-        labelModal.prepend(inputModal);
+// socket.emit("getAllSubjects", function (subjects) {
+//     subjects.forEach(subject => {
+//         var label = $('<label class="form-group form-check-label">' + subject.name + '</label>');
+//         var input = $('<input type="checkbox" name="subjects" class="form-group form-check-input" value="' + subject.name + '" />')
+//         label.prepend(input);
+//         var labelModal = $('<label class="form-group form-check-label">' + subject.name + '</label>');
+//         var inputModal = $('<input type="checkbox" name="subjectsModal" class="form-group form-check-input" value="' + subject.name + '" />')
+//         labelModal.prepend(inputModal);
 
-        $('#subjectsList').append(label);
-        $('#modalList').append(labelModal);
-    });
-});
+//         $('#subjectsList').append(label);
+//         $('#modalList').append(labelModal);
+//     });
+// });
 $(document).ready(function () {
+    var modalBody= $('.modal-body').html();
     $('#btnUpdateSubject').click(function () {
         updateMode = "subjects";
         $('.modal-title').text("עדכון תחומי עניין");
@@ -150,11 +151,13 @@ $(document).ready(function () {
                 var subjects = [];
                 $('input[name="subjectsModal"]:checked').each(
                     function () {
+                        window.alert(this.value);
                         subjects.push({
-                            id: this.value
+                            name: this.value
                         });
                     }
                 );
+                window.alert(JSON.stringify(subjects,null,2));
                 var alumni = {
                     first_name: $('#firstNameModal').val(),
                     last_name: $('#lastNameModal').val(),
@@ -167,7 +170,7 @@ $(document).ready(function () {
                     window.alert(message);
                     location.reload();
                 });
-
+x
 
             } else {
                 window.alert("Error");
@@ -184,6 +187,8 @@ $(document).ready(function () {
                     location.reload();
                 });
             });
+            
+            $('.modal-body').html(modalBody);
         }
     });
     $('#addSubject').click(

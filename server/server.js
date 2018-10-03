@@ -26,7 +26,11 @@ hbs.registerPartials(partialsPath);
 app.set('view engine', 'hbs');
 app.use(express.static(publicPath));
 app.get('/admin', (req, res) => {
-    res.render('admin.hbs');
+    res.render('admin.hbs',{
+        rowClick: ()=>{
+            window.alert("");
+        }
+    });
 });
 app.get('/', (req, res) => {
     res.render('index.hbs');
