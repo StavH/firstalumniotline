@@ -10,9 +10,11 @@
   }
   .alumniImg{
     width: 75%;
-    /* height: 100%; */
   }
   .alumniBtn{
     width: 100%;
     font-size: 100%;
+  }
+  #imageUpdate{
+    display: none;
   }

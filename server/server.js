@@ -17,7 +17,7 @@ const {
 } = require('./models/subject');
 
 const publicPath = path.join(__dirname, '../public');
-const partialsPath = path.join(__dirname,'../views/partials');
+const partialsPath = path.join(__dirname, '../views/partials');
 const port = process.env.PORT || 3000;
 var app = new express();
 var server = http.createServer(app);
@@ -26,8 +26,8 @@ hbs.registerPartials(partialsPath);
 app.set('view engine', 'hbs');
 app.use(express.static(publicPath));
 app.get('/admin', (req, res) => {
-    res.render('admin.hbs',{
-        rowClick: ()=>{
+    res.render('admin.hbs', {
+        rowClick: () => {
             window.alert("");
         }
     });
@@ -66,25 +66,29 @@ io.on('connection', (socket) => {
         console.log("NEW ALUMNI TRYING TO INSERT");
         newAlumni = new Alumni(alumni);
         newAlumni.save().then(() => {
-            if (!image) {
-                console.log("No Image Entered");
-            } else {
-                var imagePath = publicPath + "/images/" + alumni.email + "." + image.format;
-                console.log(imagePath);
-                fs.writeFile(imagePath, image.image, (err) => {
-                    if (err) {
-                        console.log("Problem Writing Files");
-                        console.log(err);
-                    } else {
-                        console.log("File Added Successfully");
-                    }
-                });
-            }
+            newImage(alumni,image);
             callback("Alumni Was Added");
         }).catch((e) => {
             callback(JSON.stringify(e, null, 2));
         });
     });
+    function newImage(alumni,image){
+        if (!image) {
+            console.log("No Image Entered");
+        } else {
+            var imagePath = publicPath + "/images/" + alumni.email + "." + image.format;
+            console.log(imagePath);
+            fs.writeFile(imagePath, image.image, (err) => {
+                if (err) {
+                    console.log("Problem Writing Files");
+                    console.log(err);
+                } else {
+                    console.log("File Added Successfully");
+                }
+            });
+        }
+        
+    }
     socket.on("getImage", (email, callback) => {
         var found = false;
         fs.readdir(publicPath + "/images", (err, files) => {
@@ -101,15 +105,56 @@ io.on('connection', (socket) => {
             callback();
         });
     });
-    socket.on("updateAlumni", (prevAlum, alumni, callback) => {
+
+    socket.on("updateAlumni", (prevAlum, alumni, image, callback) => {
+        var prevImage;
         Alumni.findOneAndUpdate(prevAlum, alumni, (err, doc) => {
             if (err) {
                 callback("Error on updating Alumni");
             } else {
+                var found = false;
+                fs.readdir(publicPath + "/images", (err, files) => {
+                    files.forEach(file => {
+                        if (file.split(prevAlum.email).length > 1) {
+                            found = true;
+                            prevImage = file;
+                        }
+                    });
+                    if (found) {
+                        console.log(prevImage);
+                        fs.unlink(publicPath+'/images/'+prevImage, function (err) {
+                            if (err) throw err;
+                            console.log('File deleted!');
+                            updateImage(alumni,image);
+                        });
+
+                    }
+                    else{
+                        newImage(alumni,image);
+                    }
+                });
                 callback("Alumni updated successfully");
             }
         });
     });
+
+    function updateImage(alumni, image) {
+        if (!image) {
+            console.log("No Image Entered");
+        } else {
+            var imagePath = publicPath + "/images/" + alumni.email + "." + image.format;
+            console.log(imagePath);
+            fs.writeFile(imagePath, image.image, (err) => {
+                if (err) {
+                    console.log("Problem Writing Files");
+                    console.log(err);
+                } else {
+                    console.log("File Added Successfully");
+                }
+            });
+        }
+
+    }
     socket.on("updateSubject", (prevSubject, newSubject, callback) => {
         Subject.findOneAndUpdate({
             name: prevSubject
