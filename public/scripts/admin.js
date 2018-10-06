@@ -151,13 +151,11 @@ $(document).ready(function () {
                 var subjects = [];
                 $('input[name="subjectsModal"]:checked').each(
                     function () {
-                        window.alert(this.value);
                         subjects.push({
                             name: this.value
                         });
                     }
                 );
-                window.alert(JSON.stringify(subjects,null,2));
                 var alumni = {
                     first_name: $('#firstNameModal').val(),
                     last_name: $('#lastNameModal').val(),
