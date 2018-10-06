@@ -1,7 +1,6 @@
 var socket = io();
 var updateMode = "alumni";
 var prevAlum;
-
 function showAlumnisFromArray(alumnis) {
     $('#alumnis').empty();
     alumnis.forEach(alumni => {
@@ -57,7 +56,7 @@ function showAlumnisFromArray(alumnis) {
 //     });
 // });
 $(document).ready(function () {
-    var modalBody= $('.modal-body').html();
+    var modalBody = $('.modal-body').html();
     $('#btnUpdateSubject').click(function () {
         updateMode = "subjects";
         $('.modal-title').text("עדכון תחומי עניין");
@@ -104,47 +103,8 @@ $(document).ready(function () {
     });
     $('#addAlumni').click(
         function () {
-            
-            var subjects = [];
-            $('input[name="subjects"]:checked').each(
-                function () {
-                    console.log(this);
-                    subjects.push({
-                        name: this.value
-
-                    });
-                }
-            );
-            var alumni = {
-                first_name: $('#firstName').val(),
-                last_name: $('#lastName').val(),
-                email: $('#email').val(),
-                phone: $('#phone').val(),
-                details: $('#desc').val(),
-                subjects
-            };
-            if(document.querySelector('#image').files[0] != undefined){
-                var imageName = document.querySelector('#image').files[0].name;
-                var imageFile = {
-                    image: document.querySelector('#image').files[0],
-                    format: imageName.substring(imageName.length - 3, imageName.length)
-                };
-            }
-            else{
-                var imageFile = null;
-            }
-            console.log(imageFile);
-            socket.emit("newAlumni", imageFile, alumni, function (message) {
-                console.log("SSS");
-                window.alert(message);
-                location.reload();
-            });
-        }
-    );
-    $('#imageReset').click(function () {
-        $('#image').val("");
-        
-    });
+            alumniUpdate("new", null);
+        });
     $('#update').click(function () {
         if (updateMode == "alumni") {
             if (prevAlum != null) {
@@ -164,11 +124,20 @@ $(document).ready(function () {
                     details: $('#detailsModal').val(),
                     subjects
                 };
-                socket.emit("updateAlumni", prevAlum, alumni, function (message) {
+                if (document.querySelector('#imageUpdate').files[0] != undefined) {
+                    var imageName = document.querySelector('#imageUpdate').files[0].name;
+                    var imageFile = {
+                        image: document.querySelector('#imageUpdate').files[0],
+                        format: imageName.substring(imageName.length - 3, imageName.length)
+                    };
+                } else {
+                    var imageFile = null;
+                }
+                socket.emit("updateAlumni", prevAlum, alumni,imageFile, function (message) {
                     window.alert(message);
                     location.reload();
                 });
-x
+                x
 
             } else {
                 window.alert("Error");
@@ -185,12 +154,11 @@ x
                     location.reload();
                 });
             });
-            
+
             $('.modal-body').html(modalBody);
         }
     });
     $('#addSubject').click(
-
         function () {
             var subject = {
                 name: $('#subject').val()
@@ -203,3 +171,77 @@ x
         }
     );
 });
+
+function alumniUpdate(editMode, oldAlumnniId) {
+    if (editMode == "new") {
+        var subjects = [];
+        $('input[name="subjects"]:checked').each(
+            function () {
+                console.log(this);
+                subjects.push({
+                    name: this.value
+
+                });
+            }
+        );
+        var alumni = {
+            first_name: $('#firstName').val(),
+            last_name: $('#lastName').val(),
+            email: $('#email').val(),
+            phone: $('#phone').val(),
+            details: $('#desc').val(),
+            subjects
+        };
+        if (document.querySelector('#image').files[0] != undefined) {
+            var imageName = document.querySelector('#image').files[0].name;
+            var imageFile = {
+                image: document.querySelector('#image').files[0],
+                format: imageName.substring(imageName.length - 3, imageName.length)
+            };
+        } else {
+            var imageFile = null;
+        }
+        console.log(imageFile);
+        socket.emit("newAlumni", imageFile, alumni, function (message) {
+            console.log("SSS");
+            window.alert(message);
+            location.reload();
+        });
+    } else if (editMode == "update") {
+        var subjects = [];
+        $('input[name="subjectsModal"]:checked').each(
+            function () {
+                console.log(this);
+                subjects.push({
+                    name: this.value
+
+                });
+            }
+        );
+        var alumni = {
+            first_name: $('#firstNameModal').val(),
+            last_name: $('#lastNameModal').val(),
+            email: $('#emailModal').val(),
+            phone: $('#phoneModal').val(),
+            details: $('#detailsModal').val(),
+            subjects
+        };
+        if (document.querySelector('#imageUpdate').files[0] != undefined) {
+            var imageName = document.querySelector('#imageUpdate').files[0].name;
+            var imageFile = {
+                image: document.querySelector('#imageUpdate').files[0],
+                format: imageName.substring(imageName.length - 3, imageName.length)
+            };
+        } else {
+            var imageFile = null;
+        }
+        console.log(imageFile);
+        console.log(alumni);
+        // socket.emit("newAlumni", imageFile, alumni, function (message) {
+        //     console.log("SSS");
+        //     window.alert(message);
+        //     location.reload();
+        // });
+    }
+
+}

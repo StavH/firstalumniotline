@@ -1,5 +1,6 @@
 var socket = io();
 
+
 function rowClick(first_name, last_name, email, phone, details, imageFile, subjectsAlum) {
     var alumni = {
         first_name,
@@ -12,6 +13,18 @@ function rowClick(first_name, last_name, email, phone, details, imageFile, subje
         console.log(alumni);
         prevAlum = alumni;
         updateMode = "alumni";
+        $('.modal-body').prepend($('<label for="imageUpdate"><img class="card-img-top" id="imageModal" src="/images/' + imageFile + '" alt="Card image"></label><input type="file" id="imageUpdate"><button class="btn btn-secondary" id="removeImageModal" onclick="resetImage()">X</button>'));
+        $('.modal-body').on('change','#imageUpdate', function () {
+            var file = $('#imageUpdate').prop('files')[0];
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                console.log(e.target.result);
+                $('#imageModal').attr('src', e.target.result);
+              }
+            reader.readAsDataURL(file);
+            
+            
+        });
         $('#firstNameModal').val(alumni.first_name);
         $('#lastNameModal').val(alumni.last_name);
         $('#emailModal').val(alumni.email);
@@ -82,3 +95,7 @@ socket.emit("getAllSubjects", function (subjects) {
 socket.emit("getAllAlumnis", function (alumnis) {
     showAlumnisFromArray(alumnis);
 });
+function resetImage(){
+    $('imageUpdate').val('');
+    $('#imageModal').attr('src','/images/default.jpg');
+}
